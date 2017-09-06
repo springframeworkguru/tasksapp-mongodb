@@ -1,0 +1,16 @@
+version: '2'
+services:
+    tasksappmongo-mongodb:
+        image: mongo:3.2.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb tasksappmongo-mongodb-config
+    tasksappmongo-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    tasksappmongo-mongodb-config:
+        image: mongo:3.2.10
+        container_name: tasksappmongo-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
